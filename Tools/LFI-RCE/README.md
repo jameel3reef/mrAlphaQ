@@ -18,7 +18,7 @@ git clone https://github.com/jameel3reef/mrAlphaQ.git
 ```
 2. Navigate to the Tools directory:
 ```bash
-cd mrAlphaQ/Tools/
+cd mrAlphaQ/Tools/LFI-RCE
 ```
 3. Run the LFI-RCE.py script:
 ```bash
