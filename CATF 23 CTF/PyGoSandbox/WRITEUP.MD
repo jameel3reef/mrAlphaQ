@@ -1,4 +1,4 @@
-# CTF Writeup: [Challenge Name]
+# CTF Writeup: PyGoSandbox
 
 ## Challenge Information
 
