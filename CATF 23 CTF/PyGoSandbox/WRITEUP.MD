@@ -14,8 +14,10 @@ I'm back stronger than ever, after failing to build a secure calculator, i made 
 
 ### Initial Analysis
 
-1- We take a look at the Dockerfile to know what we have to do, we will find that the real flag is in the `/root` dir and there is a fake flag as env variable and there is a `/FlagReader` which we have to execute to get the flag
-2- When we inspect the `encrypt.py` file we will find that it encrypts the fake flag **intersting**
+1- We take a look at the Dockerfile to know what we have to do, we will find that the real flag is in the `/root` dir and there is a fake flag as env variable and there is a `/FlagReader` which we have to execute to get the flag.
+
+2- When we inspect the `encrypt.py` file we will find that it encrypts the fake flag. **intersting**
+
 3- Lets inspect the `challenge.py` it blocks some words`BLOCKLIST = ["Scan","os","net","exec","syscall","cli","bufio","Flag","chatgpt"]` and sice it blocks the os word we can't do what we want directly so we have to find another indirect way
 
 ### Finding Clues
