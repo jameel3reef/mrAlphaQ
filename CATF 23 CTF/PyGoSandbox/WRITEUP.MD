@@ -3,6 +3,8 @@
 ## Challenge Information
 
 - **Challenge Name:** PyGoSandbox
+- **Challenge level:** Hard (3 solves)
+- **Author:** zAbuQasem
 - **CTF Event:** CATF 23
 - **Category:** MISC
 
